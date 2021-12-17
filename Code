@@ -1,0 +1,299 @@
+#Part 1: Image Representation
+from PIL import Image
+from pylab import *
+import numpy as np
+from os import listdir
+import matplotlib.pyplot as plt
+import pandas as pd
+
+def loadImages(path):
+    imagesList= listdir(path)
+    loadedImages= []
+    for image in imagesList:
+        img=Image.open(path + image)
+        loadedImages.append(img)
+    return loadedImages
+
+path="/Users/meghanharris/Desktop/image/"
+imgs=loadImages(path)
+
+crop=(100,100,200,200)
+
+image1= imgs[9].crop(crop)
+image2= imgs[8].crop(crop)
+image3=imgs[7].crop(crop)
+image4= imgs[6].crop(crop)
+image5= imgs[5].crop(crop)
+image6= imgs[4].crop(crop)
+image7= imgs[3].crop(crop)
+image8= imgs[2].crop(crop)
+image9= imgs[1].crop(crop)
+image10= imgs[0].crop(crop)
+#image1.show()
+#image2.show()
+#image3.show()
+#image4.show()
+#image5.show()
+#image7.show()
+#image8.show()
+#image9.show()
+#image10.show()
+
+#2
+#creating file names for each image and converting to greyscale
+image1=np.array(image1.convert("L"))
+image2=np.array(image2.convert("L"))
+image3=np.array(image3.convert("L"))
+image4=np.array(image4.convert("L"))
+image5=np.array(image5.convert("L"))
+image6=np.array(image6.convert("L"))
+image7=np.array(image7.convert("L"))
+image8=np.array(image8.convert("L"))
+image9=np.array(image9.convert("L"))
+image10=np.array(image10.convert("L"))
+
+#3 Flattening to a 1D array and drawing a histogram of intensity value distribution for each iamge
+
+#image1
+imhist1= plt.hist(image1.flatten(),bins=256,label="Without Normalization")
+imhist1,bins=histogram(image1.flatten(),256, normed=True)
+plt.title("Image 1 Intensity Value Distribution")
+plt.xlabel("Intensity")
+plt.ylabel("Count")
+#plt.show()
+
+#image2
+imhist2= plt.hist(image2.flatten(),bins=256,label="Without Normalization")
+imhist2, bins= histogram(image2.flatten(),256,normed=True)
+plt.title("Image 2 Intensity Value Distribution")
+plt.xlabel("Intensity")
+plt.ylabel("Count")
+#plt.show()
+
+#image3
+imhist3= plt.hist(image3.flatten(),bins=256,label="Without Normalization")
+imhist3_, bins= histogram(image3.flatten(),256,normed=True)
+plt.title("Image 3 Intensity Value Distribution")
+plt.xlabel("Intensity")
+plt.ylabel("Count")
+#plt.show()
+
+#image4
+imhist4= plt.hist(image4.flatten(),bins=256, label="Without Normalization")
+imhist4, bins= histogram(image4.flatten(),256,normed=True)
+plt.title("Image 4 Intensity Value Distribution")
+plt.xlabel("Intensity")
+plt.ylabel("Count")
+#plt.show()
+
+#image5
+imhist5= plt.hist(image5.flatten(),bins=256, label="Without Normalization")
+imhist5, bins= histogram(image5.flatten(),256,normed=True)
+plt.title("Image 5 Intensity Value Distribution")
+plt.xlabel("Intensity")
+plt.ylabel("Count")
+#plt.show()
+
+#image6
+imhist6= plt.hist(image6.flatten(),bins=256, label="Without Normalization")
+imhist6, bins= histogram(image6.flatten(), 256, normed=True)
+plt.title("Image 6 Intensity Value Distribution")
+plt.xlabel("Intensity")
+plt.ylabel("Count")
+#plt.show()
+
+#image7
+imhist7= plt.hist(image7.flatten(),bins=256, label="Without Normalization")
+imhist7, bins= histogram(image7.flatten(),bins=256,normed=True)
+plt.title("Image 7 Intensity Value Distribution")
+plt.xlabel("Intensity")
+plt.ylabel("Count")
+#plt.show()
+
+#image8
+imhist8= plt.hist(image8.flatten(),bins=256, label="Without Normalization")
+imhist8, bins= histogram(image8.flatten(),bins=256,normed=True)
+plt.title("Image 8 Intensity Value Distribution")
+plt.xlabel("Intensity")
+plt.ylabel("Count")
+#plt.show()
+
+#image9
+imhist9= plt.hist(image9.flatten(),bins=256, label="Without Normalization")
+imhist9, bins= histogram(image9.flatten(),bins=256,normed=True)
+plt.title("Image 9 Intensity Value Distribution")
+plt.xlabel("Intensity")
+plt.ylabel("Count")
+#plt.show()
+
+#image10
+hist10= plt.hist(image10.flatten(),bins=256,label="Without Normalization")
+imhist10, bins= histogram(image10.flatten(),256,normed=True)
+plt.title("Image 10 Intensity Value Distribution")
+plt.xlabel("Intensity")
+plt.ylabel("Count")
+#plt.show()
+
+#flattening the images to 1D vector
+image1_flat=image1.flatten()
+image2_flat=image2.flatten()
+image3_flat=image3.flatten()
+image4_flat=image4.flatten()
+image5_flat=image5.flatten()
+image6_flat=image6.flatten()
+image7_flat=image7.flatten()
+image8_flat=image8.flatten()
+image9_flat=image9.flatten()
+image10_flat=image10.flatten()
+
+imgsflat=[]
+for img in imgs:
+    img=img.crop(crop)
+    img=np.asarray(img.convert("L"),dtype=object)
+    img= img.flatten()
+    imgsflat.append(img)
+
+np.savetxt("/Users/meghanharris/Desktop/HW2_Part1_3.csv",imgsflat, fmt='%s',delimiter=',')
+
+#4 Conducting a histogram equalization to normalize each image.
+# Creating a histogram to show intensity value distribution after normalizing
+
+#image 1
+cdf1=imhist1.cumsum()
+cdf1=255*cdf1 / cdf1[-1]
+img1= interp(image1_flat, bins[:-1], cdf1)
+im1_norm= img1.reshape(image1_flat.shape)
+print(im1_norm)
+
+hist(im1_norm.flatten(),256, label="With Normalization")
+plt.title("Image 1 Intensity Value Distribution After Normalization")
+plt.ylabel("Count")
+plt.xlabel("Intensity")
+plt.legend(loc="upper right")
+plt.show()
+
+#image 2
+cdf2=imhist2.cumsum()
+cdf2=255*cdf2 / cdf2[-1]
+img2= interp(image2_flat, bins[:-1], cdf2)
+im2_norm= img2.reshape(image2_flat.shape)
+print(im2_norm)
+
+hist(im2_norm.flatten(),256, label="With Normalization")
+plt.title("Image 2 Intensity Value Distribution After Normalization")
+plt.ylabel("Count")
+plt.xlabel("Intensity")
+plt.legend(loc="upper left")
+plt.show()
+
+#image3
+cdf3=imhist3_.cumsum()
+cdf3=255*cdf3 / cdf3[-1]
+img3= interp(image3_flat, bins[:-1], cdf3)
+im3_norm= img3.reshape(image3_flat.shape)
+print(im3_norm)
+
+hist(im3_norm.flatten(),256, label="With Normalization")
+plt.title("Image 3 Intensity Value Distribution After Normalization")
+plt.ylabel("Count")
+plt.xlabel("Intensity")
+plt.legend(loc="upper right")
+plt.show()
+
+#image4
+cdf4=imhist4.cumsum()
+cdf4=255*cdf4 / cdf4[-1]
+img4= interp(image4_flat, bins[:-1], cdf4)
+im4_norm= img4.reshape(image4_flat.shape)
+print(im4_norm)
+
+hist(im4_norm.flatten(),256, label="With Normalization")
+plt.title("Image 4 Intensity Value Distribution After Normalization")
+plt.ylabel("Count")
+plt.xlabel("Intensity")
+plt.legend(loc="upper left")
+plt.show()
+
+#image 5
+cdf5=imhist5.cumsum()
+cdf5=255*cdf5 / cdf5[-1]
+img5= interp(image5_flat, bins[:-1], cdf5)
+im5_norm= img5.reshape(image5_flat.shape)
+print(im5_norm)
+
+hist(im5_norm.flatten(),256, label="With Normalization")
+plt.title("Image 5 Intensity Value Distribution After Normalization")
+plt.ylabel("Count")
+plt.xlabel("Intensity")
+plt.legend(loc="upper left")
+plt.show()
+
+#image6
+cdf6=imhist6.cumsum()
+cdf6=255*cdf6 / cdf6[-1]
+img6= interp(image6_flat, bins[:-1], cdf6)
+im6_norm= img6.reshape(image6_flat.shape)
+print(im6_norm)
+
+hist(im6_norm.flatten(),256, label="With Normalization")
+plt.title("Image 6 Intensity Value Distribution After Normalization")
+plt.ylabel("Count")
+plt.xlabel("Intensity")
+plt.legend(loc="upper left")
+plt.show()
+
+#image7
+cdf7=imhist7.cumsum()
+cdf7=255*cdf7 / cdf7[-1]
+img7= interp(image7_flat, bins[:-1], cdf7)
+im7_norm= img7.reshape(image7_flat.shape)
+print(im7_norm)
+
+hist(im7_norm.flatten(),256, label="With Normalization")
+plt.title("Image 7 Intensity Value Distribution After Normalization")
+plt.ylabel("Count")
+plt.xlabel("Intensity")
+plt.legend(loc="upper left")
+plt.show()
+
+#image8
+cdf8=imhist8.cumsum()
+cdf8=255*cdf8 / cdf8[-1]
+img8= interp(image8_flat, bins[:-1], cdf8)
+im8_norm= img8.reshape(image8_flat.shape)
+print(im8_norm)
+
+hist(im8_norm.flatten(),256, label="With Normalization")
+plt.title("Image 8 Intensity Value Distribution After Normalization")
+plt.ylabel("Count")
+plt.xlabel("Intensity")
+plt.legend(loc="upper right")
+plt.show()
+
+#image9
+cdf9=imhist9.cumsum()
+cdf9=255*cdf9 / cdf9[-1]
+img9= interp(image9_flat, bins[:-1], cdf9)
+im9_norm= img9.reshape(image9_flat.shape)
+print(im9_norm)
+
+hist(im9_norm.flatten(),256, label="With Normalization")
+plt.title("Image 9 Intensity Value Distribution After Normalization")
+plt.ylabel("Count")
+plt.xlabel("Intensity")
+plt.legend(loc="upper left")
+plt.show()
+
+#image 10
+cdf10=imhist10.cumsum()
+cdf10=255*cdf10 / cdf10[-1]
+img10= interp(image10_flat, bins[:-1], cdf10)
+im10_norm= img10.reshape(image10_flat.shape)
+#print(im10_norm)
+
+hist(im10_norm.flatten(),256, label="With Normalization")
+plt.title("Image 10 Intensity Value Distribution After Normalization")
+plt.ylabel("Count")
+plt.xlabel("Intensity")
+plt.legend(loc="upper right")
+#plt.show()
